@@ -1,0 +1,9 @@
+-- suppliers!
+
+--  Products per supplier
+select CompanyName, country, city,
+count (distinct productid) products
+from [dbo].[Suppliers] a
+full join Products b
+on a.SupplierID= b.SupplierID
+group by country, city, CompanyName
