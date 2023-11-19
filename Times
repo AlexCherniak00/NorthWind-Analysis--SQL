@@ -1,0 +1,39 @@
+-- time details!
+
+
+
+-- How long it takes for products to arrive and ship (days). (Table).
+select OrderID,
+ShipCountry,
+orderdate,
+shippeddate,
+requireddate,
+DATEDIFF(DAY, OrderDate, ShippedDate) days_order2ship,
+DATEDIFF (day, ShippedDate, RequiredDate) days_ship2required
+from [dbo].[Orders]
+
+-- avg for every country
+select ShipCountry,
+AVG (days_order2ship) avg_order_to_ship,
+AVG (days_ship2required) avg_ship_to_required,
+AVG (total_days) avg_total_days
+from (
+select OrderID,
+ShipCountry,
+orderdate,
+shippeddate,
+requireddate,
+DATEDIFF(DAY, OrderDate, ShippedDate) days_order2ship,
+DATEDIFF (day, ShippedDate, RequiredDate) days_ship2required,
+DATEDIFF (day, OrderDate, RequiredDate) total_days
+from [dbo].[Orders] ) q
+group by ShipCountry
+
+--count orders (table)
+
+select YEAR (OrderDate) 'year',
+MONTH (orderdate) 'month',
+COUNT (orderid) orders
+from Orders
+group by MONTH (orderdate), YEAR (OrderDate)
+order by year, month
