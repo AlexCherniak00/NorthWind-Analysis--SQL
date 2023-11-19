@@ -1,0 +1,42 @@
+-- products and categories details!
+
+
+-- most profitable products
+select 
+ProductName,
+sum ((a.UnitPrice- a.UnitPrice* Discount)* Quantity) revenue
+from [dbo].[Order Details] a
+full join Products b
+on b.ProductID= a.ProductID
+group by ProductName
+
+
+-- most selled products
+select productname,
+COUNT (distinct OrderID) count_orders
+from [Order Details] a
+full join [dbo].[Products] b
+on b.ProductID= a.ProductID
+group by productname
+
+
+-- most selled and profitable categories
+select CategoryName, 
+COUNT (orderid) orders,
+sum ((UnitPrice- (UnitPrice* Discount))* Quantity) revenue
+from (
+select  productid, ProductName, CategoryName
+from Categories a
+full join Products b
+on a.CategoryID= b.CategoryID) q
+full join [Order Details] w
+on q.ProductID= w.ProductID
+group by CategoryName
+
+
+
+
+
+
+
+
