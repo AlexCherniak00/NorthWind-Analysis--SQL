@@ -1,0 +1,22 @@
+-- customers
+
+-- count customers
+
+select Country,
+COUNT (distinct CustomerID) customers,
+sum (COUNT (distinct CustomerID)) over () total_customers
+from [dbo].[Customers]
+group by Country
+
+--profitable countries
+
+select Country,
+sum (distinct (UnitPrice- UnitPrice* Discount)* Quantity) revenue
+from customers t1
+full join Orders t2
+on t1.CustomerID= t2.CustomerID
+full join [Order Details] t3
+on t2.OrderID= t3.OrderID
+group by Country
+
+
